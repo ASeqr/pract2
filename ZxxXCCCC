@@ -1,0 +1,203 @@
+USE koipol;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS SC_Brand;
+DROP TABLE IF EXISTS SC_SpeedScan;
+DROP TABLE IF EXISTS SC_Dashcam;
+DROP TABLE IF EXISTS SC_Type;
+DROP TABLE IF EXISTS SC_Depth;
+DROP TABLE IF EXISTS SC_Def;
+DROP TABLE IF EXISTS SC_Acs;
+DROP TABLE IF EXISTS SC_Users;
+DROP TABLE IF EXISTS SC_Acs_Brand;
+DROP TABLE IF EXISTS SC_Rules;
+DROP TABLE IF EXISTS SC_Users_Table;
+DROP TABLE IF EXISTS SC_Acs_Table;
+
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+CREATE TABLE SC_Def (
+    SC_Def_id INT(5),
+    SC_Def_name VARCHAR(50),
+  Image blob,
+    PRIMARY KEY (SC_Def_id)
+    );
+CREATE TABLE SC_Rules (
+    SC_Rules_id INT(5),
+    SC_Rules_name VARCHAR(50),
+    PRIMARY KEY (SC_Rules_id)
+    );
+    
+CREATE TABLE SC_Acs (
+    SC_Acs_id INT(5),
+    SC_Acs_name VARCHAR(50),
+  Image blob,
+    PRIMARY KEY (SC_Acs_id)
+    );
+
+CREATE TABLE SC_Users (
+    SC_Users_id INT(5),
+    SC_Users_name VARCHAR(50),
+  Image blob,
+    PRIMARY KEY (SC_Users_id)
+    );
+
+CREATE TABLE SC_Brand (
+    SC_Brand_id INT(5),
+    SC_Brand_name VARCHAR(50),
+  Image blob,
+    PRIMARY KEY (SC_Brand_id)
+    );
+    
+CREATE TABLE SC_Type (
+    SC_Type_id INT(5),
+    SC_Type_name VARCHAR(50),
+  Image blob,
+    PRIMARY KEY (SC_Type_id)
+    );
+    
+CREATE TABLE SC_Depth (
+    SC_Depth_id INT(5),
+    SC_Depth_name VARCHAR (5000),
+  Image blob,
+    PRIMARY KEY (SC_Depth_id)
+    );
+    
+CREATE TABLE SC_SpeedScan (
+    SC_SpeedScan_id INT(5),
+    SC_SpeedScan_name VARCHAR(800),
+  Image blob,
+    PRIMARY KEY (SC_SpeedScan_id)
+    );
+
+CREATE TABLE SC_Dashcam (
+    SC_D_name  VARCHAR(100), 
+    SC_D_brand INT(5),
+    SC_D_SpeedScan     INT(5),
+    SC_D_Type INT(5),
+    SC_D_Def INT(5), 
+    SC_D_Depth INT(5),
+    SC_D_Acs INT(5),
+  Image blob,
+    INDEX(SC_D_name),
+         PRIMARY KEY (SC_D_name),
+         FOREIGN KEY (SC_D_brand) REFERENCES SC_Brand (SC_Brand_id),
+         FOREIGN KEY (SC_D_SpeedScan) REFERENCES SC_SpeedScan (SC_SpeedScan_id),
+    	 FOREIGN KEY (SC_D_Type) REFERENCES SC_Type (SC_Type_id),
+         FOREIGN KEY (SC_D_Def) REFERENCES SC_Def (SC_Def_id),
+         FOREIGN KEY (SC_D_Acs) REFERENCES SC_Acs (SC_Acs_id),
+         FOREIGN KEY (SC_D_Depth) REFERENCES SC_Depth (SC_Depth_id)
+       ); 
+       
+CREATE TABLE SC_Users_Table (
+    SC_D_Users_Table  VARCHAR(100), 
+    SC_D_Users INT(5),
+    SC_D_Rules INT(5),    
+    INDEX(SC_D_Users_Table),
+         PRIMARY KEY (SC_D_Users_Table),
+    	 FOREIGN KEY (SC_D_Rules) REFERENCES SC_Rules (SC_Rules_id),
+         FOREIGN KEY (SC_D_Users) REFERENCES SC_Users (SC_Users_id)
+       ); 
+CREATE TABLE SC_Acs_Brand (
+    SC_Acs_Brand_id INT(5),
+    SC_Acs_Brand_name VARCHAR(50),
+  Image blob,
+    PRIMARY KEY (SC_Acs_Brand_id)
+    );   
+CREATE TABLE SC_Acs_Table (
+    SC_D_Acs_Table VARCHAR(100),
+    SC_D_Acs INT(5),
+    SC_D_Acs_Brand INT(5),    
+    INDEX(SC_D_Acs_Table),
+         PRIMARY KEY (SC_D_Acs_Table),
+         FOREIGN KEY (SC_D_Acs_Brand) REFERENCES SC_Acs_Brand (SC_Acs_Brand_id ),
+         FOREIGN KEY (SC_D_Acs) REFERENCES SC_Acs (SC_Acs_id)
+       ); 
+       
+INSERT INTO SC_Type (SC_Type_id, SC_Type_name)
+VALUES  (0, 'Проводной'),
+        (1, 'Беспроводной');
+        
+INSERT INTO SC_Rules (SC_Rules_id, SC_Rules_name)
+VALUES  (0, 'Guest'),
+		(1, 'User'),
+        (2, 'Admin');
+
+INSERT INTO SC_Def (SC_Def_id, SC_Def_name)
+VALUES  (0, 'IP 54'),
+        (1, 'IP 65');
+        
+INSERT INTO SC_Depth (SC_Depth_id, SC_Depth_name)
+VALUES  (0, '110-230'),
+		(1, '231-340'),
+        (2, '341-600'), 
+        (3, '601-800'), 
+        (4, '800+');
+    
+INSERT INTO SC_Users (SC_Users_id, SC_Users_name)
+VALUES  (0, 'zxcsadghoul'),
+        (1, 'Admin'), 
+        (2, 'Slider'),
+        (3, 'Klosua'), 
+        (4, '-'); 
+
+INSERT INTO SC_Acs_Brand (SC_Acs_Brand_id, SC_Acs_Brand_name)
+VALUES  (0, 'Unitech'),
+        (1, 'Zebra'), 
+        (2, 'Honeywell');
+
+INSERT INTO SC_Brand (SC_Brand_id, SC_Brand_name)
+VALUES  (0, 'Symbol'),
+        (1, 'Honeywell'), 
+        (2, 'Datalogic'), 
+        (3, 'Cipher');
+
+INSERT INTO SC_SpeedScan (SC_SpeedScan_id, SC_SpeedScan_name)
+VALUES  (0, '10-35'),
+        (1, '36-69'), 
+        (2, '70-199'), 
+        (3, '200-500'),
+        (4, '500+');
+        
+INSERT INTO SC_Acs (SC_Acs_id, SC_Acs_name)
+VALUES  (0, 'Зарядное устройство для сканеров'),
+        (1, 'Кабель'), 
+        (2, 'Базовая станция'), 
+        (3, 'Блок питания'), 
+        (4, 'Аккумуляторная батарея');
+        
+INSERT INTO SC_Acs_Table (SC_D_Acs_Table, SC_D_Acs_Brand , SC_D_Acs )
+VALUES  ('Honeywell MB4-SCN02',                      2,             0 ), 
+        ('Zebra CS6080',                             1,             0 ),
+        ('Zebra RS5100',                             1,             0 ),
+        ('Zebra RS6100',                             1,             0 ),
+        ('Honeywell EAS /MK7820 Solaris RS232 ',     2,             1 ),
+        ('Uniteth ES700',    						 0,             1 ),
+        ('Unitech MS652 Plus',           		     0,             0 ),
+        ('Zebra RS507',								 1,             3  ),
+        ('Honeywell  CCB12-010BT-HC',  				 2,             2  ),
+        ('Uniteth MS100',                 			 0,             0  );      
+       
+INSERT INTO SC_Users_Table (SC_D_Users_Table,SC_D_Users,SC_D_Rules)
+VALUES  ('zxcsadghoul',0,1),
+        ('Admin',1,3), 
+        ('Slider',2,1),
+        ('Klosua',3,0), 
+        ('-',    4,1); 
+
+INSERT INTO SC_Dashcam (SC_D_name, SC_D_brand, SC_D_SpeedScan, SC_D_Type, SC_D_Def , SC_D_Depth,  Image)
+VALUES  ('Symbol-LS-3478-FZ',             0,             0,           0,        1,       0,        NULL), 
+        ('SYMBOL-P360',                   0,             0,           0,        1,       0,        NULL),
+        ('SYMBOL-P360-PHASER',            0,             0,           0,        0,       0,        NULL),
+        ('SYMBOL-DS-3408',                0,             1,           0,        0,       1,        NULL),
+        ('HONEYWELL-HHP-4800I',           1,             3,           0,        0,       2,        NULL),
+        ('Honeywell Granit 1910i 1D',     1,             4,           0,        1,       4,        NULL),
+        ('Honeywell 3800i',               1,             3,           1,        1,       0,        NULL),
+        ('Honeywell 1911iER',             1,             2,           1,        1,       3,        NULL),
+        ('Datalogic PowerScan PD7130-YB', 2,             3,           0,        1,       3,        NULL),
+        ('Datalogic PowerScan PD7100',    2,             3,           0,        1,       4,        NULL),
+        ('Cipher 1704',                   3,             0,           0,        0,       2,        NULL),
+        ('Datalogic PowerScan PD9530',    2,             1,           0,        1,       3,        NULL),
+        ('Datalogic PowerScan PD9530-HP', 2,             1,           0,        1,       3,        NULL);
+
